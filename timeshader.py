@@ -15,15 +15,10 @@ def rotation(uv,ctx):
     x = xy.x-0.5
     y = xy.y-0.5
     angle = ctx.time * 2*3.14159/48
-    A = np.array([[cos(angle), -sin(angle)],
-                  [sin(angle), cos(angle)]])
-
-    B = np.array([[x],
-                  [y]])
-
-    # Perform matrix multiplication
-    result = A @ B
-    xy = vec2(float(result[0][0])+0.5,float(result[1][0])+0.5)*ctx.size
+    c = cos(angle)
+    s = sin(angle)
+    
+    xy = vec2(float(s*x-c*x)+0.5,float(s*y+c*y)+0.5)*ctx.size
     color = sample("cobblestone.ppm",xy.x,xy.y)
     return color
 
