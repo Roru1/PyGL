@@ -69,6 +69,11 @@ class vec3:
     def __round__(self):
         return vec3(round(self.r),round(self.g),round(self.b))
 
+class Context:
+    def __init__(self, time=0, width=0, height=0):
+        self.time = time
+        self.size = vec2(width,height)
+
 
 @cache
 def mciparser(mci):
@@ -177,10 +182,9 @@ def render(x=255, y=255,frames=1):
                 count += 1
 
                 v = vec2(j, i)
-                if has_time:
-                    pixel = round(shader(v,t))
-                else:
-                    pixel = round(shader(v))
+                ctx = Context(t, x, y)
+                pixel = round(shader(v, ctx))
+
                 pixel_buffer += [pixel.r, pixel.g, pixel.b]
                 print(f"\r{count}/{total}, frame {t+1}/{frames}", end="")
         with open("temp.tfb", "ab") as file:

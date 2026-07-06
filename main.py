@@ -26,16 +26,17 @@ def main():
             pygl.shader = shader_module.shader
         else:
             print("""You must define your shaders in shaderpicker, or name your shader "shader" """)
-    sig = inspect.signature(pygl.shader)
-    has_time = "time" in sig.parameters
+
+
+
     x = int(input("X Resolution: "))
     y = int(input("Y Resolution: "))
-    if has_time:
-        frames = int(input("Frames: "))
-        pygl.render(x, y,frames)
-    else:
-        pygl.render(x,y)
-    if has_time:
+
+    frames = int(input("Frames (1 for a still image): "))
+    pygl.render(x, y,frames)
+
+
+    if frames != 1:
         name = input("Enter name for image (.gif): ")
         if not name.endswith(".gif"):
             name += ".gif"
