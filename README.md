@@ -25,12 +25,12 @@ and that it is in the same folder as the rest of the files, then just run main.p
 ## How to get images
 to get images just name your image "input.png", and run ppmconverter.py then a file named imported.ppm should show up, just rename it and now you have an image you can sample
 ## Things inside pygl.py
-**sample()**
+### **sample()**
 sample requires first, a filename, then the x coordinate, then y coordinate in pixel coordinates, then you can optionally do mode=int
 1. mode 0 is the default, it wraps out of bounds
 2. mode 1 clamps to the edge color out of bounds
 3. mode 2 sets to a vec3 color you set with border=vec3(r,g,b)
-**vectors**
+### **vectors**
 vec2 has two components, x and y, it supports arithmatic with other vec2s, rounding and if you only do vec2(number) instead of vec2(number,number2) it sets both to that number
 
 vec3 has three components, r, g, and b, it supports the same things vec2 does exept with other vec3s
