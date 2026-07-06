@@ -6,7 +6,7 @@ from math import sin,cos
 def translation(uv,ctx):
     x=uv.x
     y=uv.y
-    x += ctx.time*(10.625/2)
+    x += ctx.time*(ctx.size.x/48)
 
     return sample("cobblestone.ppm",x,y)
 
