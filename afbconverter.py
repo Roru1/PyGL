@@ -22,6 +22,3 @@ def afbtogif(name):
         duration=1000 // 24,
         loop=0
     )
-
-
-afbtogif("output.gif")
