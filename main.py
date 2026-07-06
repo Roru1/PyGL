@@ -3,7 +3,7 @@ import importlib
 import os
 import inspect
 from afbconverter import afbtogif
-from ppmtopng import ppmtopng
+from ppmconverter import ppmtopng
 
 print("\033[34;1mSHADER RUNNER\033[0m")
 print("Press\033[35;5m [ENTER]\033[0m to continue")
