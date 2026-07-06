@@ -5,13 +5,13 @@ To use this first write a shaderpack, a shaderpack is a python file that contain
 
 a shader function is a function like this
 ```
-def shader(uv,time):
+def shader(uv,ctx):
 	x = uv.x
 	y = uv.y
 	color = sample("cobblestone.ppm",x,y)
 	return color
 ```
-it can either take time, or not, time is the frame number of the animation starting at 0. and uv is a vec2 which stores the pixel coordenates, it must return a vec3 containing the resulting color
+it takes uv, which is is a vec2 which stores the pixel coordenates, and ctx, ctx contains time which is the frame index from 0, and size, which is a vec2 with the size of the image, it must return a vec3 containing the resulting color
 
 if you want to have more than one shader or have the shader named something other than shader, use a function named shaderpicker, it should return a dictionary like this
 ```
