@@ -6,8 +6,9 @@ To use this first write a shaderpack, a shaderpack is a python file that contain
 a shader function is a function like this
 ```
 def shader(uv,ctx):
-	x = uv.x
-	y = uv.y
+	xy = uv/ctx.size
+	x = xy.x
+	y = xy.y
 	color = sample("cobblestone.ppm",x,y)
 	return color
 ```
