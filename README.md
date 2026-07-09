@@ -9,10 +9,10 @@ def shader(uv,ctx):
 	xy = uv/ctx.size
 	x = xy.x
 	y = xy.y
-	color = sample("cobblestone.ppm",x,y)
+	color = sample(ctx.textures[0],x,y)
 	return color
 ```
-it takes uv, which is is a vec2 which stores the pixel coordenates, and ctx, ctx contains time which is the frame index from 0, and size, which is a vec2 with the size of the image, it must return a vec3 containing the resulting color
+it takes uv, which is is a vec2 which stores the pixel coordenates, and ctx, ctx contains time which is the frame index from 0, size, which is a vec2 with the size of the image, and textures, a list of 3 texture paths to put in sample(), it must return a vec3 containing the resulting color
 
 if you want to have more than one shader or have the shader named something other than shader, use a function named shaderpicker, it should return a dictionary like this
 ```
@@ -22,7 +22,7 @@ make sure the shaderpack python file has this on top
 ```
 from pygl import *
 ```
-and that it is in the same folder as the rest of the files, then just run main.py and follow what it says
+and that it is in the same folder as the rest of the files, then just run main.py and follow what it says, then you should see two files with the name you chose, an afb if it was animated, or a ppm if it was still, and a gif/png
 ## How to get images
 to get images just name your image "input.png", and run ppmconverter.py then a file named imported.ppm should show up, just rename it and now you have an image you can sample
 ## Things inside pygl.py
