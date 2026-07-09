@@ -33,18 +33,16 @@ def main():
     y = int(input("Y Resolution: "))
 
     frames = int(input("Frames (1 for a still image): "))
-    pygl.render(x, y,frames)
+    t1 = input("What texture to use for texture 1 (.ppm)?")
+    t2 = input("What texture to use for texture 2 (.ppm)?")
+    t3 = input("What texture to use for texture 3 (.ppm)?")
+    name = input("Enter name for image: ")
+    pygl.render(x, y,frames,name,t1,t2,t3)
 
 
     if frames != 1:
-        name = input("Enter name for image (.gif): ")
-        if not name.endswith(".gif"):
-            name += ".gif"
         afbtogif(name)
     else:
-        name = input("Enter name for image (.png): ")
-        if not name.endswith(".png"):
-            name += ".png"
         ppmtopng(name)
 
     if input("e to exit: ") == "e":

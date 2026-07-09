@@ -70,9 +70,10 @@ class vec3:
         return vec3(round(self.r),round(self.g),round(self.b))
 
 class Context:
-    def __init__(self, time=0, width=0, height=0):
+    def __init__(self, time=0, width=0, height=0, texture1="cobblestone.ppm", texture2="cobblestone.ppm", texture3="cobblestone.ppm"):
         self.time = time
         self.size = vec2(width,height)
+        self.textures = [texture1,texture2,texture3]
 
 
 @cache
@@ -129,8 +130,8 @@ def sample(image, x, y, imagetype=0, mode=0, border=vec3(255, 0, 255)):
 
     else:
         colors, width, height = mciparser(image)
-    x = round(x)
-    y = round(y)
+    x = round(x*(width-1))
+    y = round(y*(height-1))
     if (x) > width - 1 or x < 0 or y < 0 or y > height - 1:
         match mode:
             case 0:
@@ -169,12 +170,10 @@ def make_afb(width,height):
 
 
 
-def render(x=255, y=255,frames=1):
+def render(x=255, y=255,frames=1,name="output",t1="cobblestone.ppm", t2="cobblestone.ppm", t3="cobblestone.ppm"):
     total = x * y
 
     pixel_buffer = []
-    sig = inspect.signature(shader)
-    has_time = "time" in sig.parameters
     for t in range(frames):
         count = 0
         for i in range(0, y):
@@ -182,20 +181,21 @@ def render(x=255, y=255,frames=1):
                 count += 1
 
                 v = vec2(j, i)
-                ctx = Context(t, x, y)
+                ctx = Context(t, x, y,t1,t2,t3)
                 pixel = round(shader(v, ctx))
 
                 pixel_buffer += [pixel.r, pixel.g, pixel.b]
                 print(f"\r{count}/{total}, frame {t+1}/{frames}", end="")
-        with open("temp.tfb", "ab") as file:
-            file.write(bytes(pixel_buffer))
+
         if frames != 1:
+            with open("temp.tfb", "ab") as file:
+                file.write(bytes(pixel_buffer))
             pixel_buffer = []
     if frames == 1:
-        with open("output.ppm", "w", encoding="ascii") as file:
+        with open(f"{name}.ppm", "w", encoding="ascii") as file:
             file.write(make_image(x, y, pixel_buffer))
     else:
-        with open("output.afb", "wb") as file:
+        with open(f"{name}.afb", "wb") as file:
             file.write(make_afb(x,y))
         with open("temp.tfb", "wb") as file:
             file.write(b"")
