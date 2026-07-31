@@ -19,7 +19,15 @@ def main():
       print("Choose a shader from the selection below:")
       for i in range(1,len(b)+1):
         print(f"{i}: {b[i-1]}")
-      c = int(input("Enter which number shader you want: "))
+      c = input("Enter which number shader you want: ")
+      try:
+          c = int(c)
+      except ValueError:
+          print("do the number next time")
+          return
+      if c > len(b) or c<1:
+          print("That's not a shader dummy")
+          return
       pygl.shader = shader_dict[b[c-1]]
     else:
         if hasattr(shader_module, "shader"):
@@ -33,9 +41,9 @@ def main():
     y = int(input("Y Resolution: "))
 
     frames = int(input("Frames (1 for a still image): "))
-    t1 = input("What texture to use for texture 1 (.ppm)?")
-    t2 = input("What texture to use for texture 2 (.ppm)?")
-    t3 = input("What texture to use for texture 3 (.ppm)?")
+    t1 = input("What is the first data (for textures do .ppm)?")
+    t2 = input("What is the second data?")
+    t3 = input("What is the third data?")
     name = input("Enter name for image: ")
     pygl.render(x, y,frames,name,t1,t2,t3)
 
@@ -48,4 +56,4 @@ def main():
     if input("e to exit: ") == "e":
         exit()
 while True:
-    main()
+        main()
