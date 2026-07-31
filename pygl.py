@@ -44,6 +44,8 @@ class vec2:
         return vec2(float(self.x),float(self.y))
     def sqr(self):
         return vec2(self.x*self.x,self.y*self.y)
+    def __mod__(self,other):
+        return vec2(self.x%other.x,self.y%other.y)
 
 
 class vec3:
@@ -89,10 +91,19 @@ class vec3:
         return vec3(self.r*self.r,self.g*self.g,self.b*self.b)
 
 class Context:
-    def __init__(self, time=0, width=0, height=0, texture1="cobblestone.ppm", texture2="cobblestone.ppm", texture3="cobblestone.ppm"):
+    def __init__(self, time=0, width=0, height=0, data=None):
+        if data is None:
+            data = []
         self.time = time
         self.size = vec2(width,height)
-        self.textures = [texture1,texture2,texture3]
+        self.data = data
+        self.textures = self.data
+
+class Shaderdata:
+    def __init__(self,shader,description="This shader shows off my awesome shader abilities okay bye",inputs=0):
+        self.shader = shader
+        self.description = description
+        self.inputs = inputs
 
 
 # Renderer stuff
@@ -198,7 +209,7 @@ def make_afb(width,height,frames):
 
 
 # Main render function
-def render(x=255, y=255,frames=1,name="output",t1="cobblestone.ppm", t2="cobblestone.ppm", t3="cobblestone.ppm"):
+def render(x=255, y=255,frames=1,name="output",data=[]):
     total = x * y
     with open("temp.tfb", "wb") as file:
         file.write(b"")
@@ -208,12 +219,13 @@ def render(x=255, y=255,frames=1,name="output",t1="cobblestone.ppm", t2="cobbles
     pixel_buffer = []
     for t in range(frames):
         count = 0
+        ctx = Context(t, x, y, data)
         for i in range(0, y):
             for j in range(0, x):
                 count += 1
 
                 v = vec2(j, i)
-                ctx = Context(t, x, y,t1,t2,t3)
+
                 pixel = round(shader(v, ctx))
 
                 pixel_buffer += [pixel.r, pixel.g, pixel.b]
