@@ -1,6 +1,5 @@
 from functools import cache
-from math import sqrt
-import shutil
+from math import sqrt, floor, ceil
 
 class vec2:
     def __init__(self, x, y=None):
@@ -97,6 +96,7 @@ class Context:
         self.time = time
         self.size = vec2(width,height)
         self.data = data
+        # so I don't have to change older shaders
         self.textures = self.data
 
 class Shaderdata:
@@ -282,6 +282,41 @@ def invBilinear(p, a, b, c, d):
 
     return vec2(u, v)
 
+# euclidian Distance
 def distance(v21,v22):
     difference = v21-v22
     return sqrt(difference.x*difference.x+difference.y*difference.y)
+
+def lerp3(color1,color2,t):
+    t = vec3(t)
+    return color2*t+(color1*(vec3(1)-t))
+
+def bilin3(color1,color2,color3,color4,ta):
+    t = ta.x
+    a = ta.y
+    return lerp3(lerp3(color1,color3,a),lerp3(color2,color4,a),t)
+
+def sampleinterpolated(image, x, y,interpolationmode=0, imagetype=0, mode=0, border=vec3(255, 0, 255)):
+    if imagetype == 0:
+        colors, width, height = imagegrabber(image)
+
+    else:
+        colors, width, height = mciparser(image)
+    if interpolationmode == 0:
+        x *= width-1
+        y *= height-1
+        x1 = floor(x)/(width-1)
+        x2 = ceil(x)/(width-1)
+        y1 = floor(y)/(height-1)
+        y2 = ceil(y)/(height-1)
+        color1 = sample(image,x1,y1,imagetype,mode,border)
+        color2 = sample(image,x2,y1,imagetype,mode,border)
+        color3 = sample(image,x1,y2,imagetype,mode,border)
+        color4 = sample(image,x2,y2,imagetype,mode,border)
+        t = x%1
+        a = y%1
+        ta = vec2(t,a)
+        return bilin3(color1,color2,color3,color4,ta)
+    else:
+        print("nothing else buddy")
+        return "nothing else"

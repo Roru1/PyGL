@@ -1,7 +1,6 @@
 import pygl
 import importlib
 import os
-import inspect
 from afbconverter import afbtogif
 from ppmconverter import ppmtopng
 
@@ -10,8 +9,10 @@ print("Press\033[35;5m [ENTER]\033[0m to continue")
 
 input()
 def main():
+    inputs = ["Texture","Data 1","Data 2"]
     os.system('cls' if os.name == 'nt' else 'clear')
     a = input("Enter python script with your shaders (without extention): ")
+
     shader_module = importlib.import_module(a)
     if hasattr(shader_module,"shaderpicker"):
       shader_dict = shader_module.shaderpicker()
@@ -33,7 +34,8 @@ def main():
 
         if not isinstance(shader_dict[b[c-1]],pygl.Shaderdata):
           pygl.shader = shader_dict[b[c-1]]
-          inputs = 3
+
+          break
         else:
           shader_data = shader_dict[b[c-1]]
           print(shader_data.description)
@@ -46,9 +48,10 @@ def main():
     else:
         if hasattr(shader_module, "shader"):
             pygl.shader = shader_module.shader
-            inputs = 3
+
         else:
             print("""You must define your shaders in shaderpicker, or name your shader "shader" """)
+            return
 
 
 
@@ -56,19 +59,28 @@ def main():
     y = int(input("Y Resolution: "))
 
     frames = int(input("Frames (1 for a still image): "))
-    data = [input("What is the 1st data (for textures do .ppm)? ")]
-    for i in range(inputs-1):
-        i +=2
-        j = str(i)
-        if j.endswith("2"):
-            suffix = "nd"
-        elif j.endswith("3"):
-            suffix = "rd"
-        elif j.endswith("1"):
-            suffix = "st"
-        else:
-            suffix = "th"
-        data.append(input(f"What is the {i}{suffix} data? "))
+
+    # old data system
+
+    #data = [input("What is the 1st data (for textures do .ppm)? ")]
+    #for i in range(inputs-1):
+    #    i +=2
+    #    j = str(i)
+    #    if j.endswith("2"):
+    #        suffix = "nd"
+    #    elif j.endswith("3"):
+    #        suffix = "rd"
+    #    elif j.endswith("1"):
+    #        suffix = "st"
+    #    else:
+    #        suffix = "th"
+    #    data.append(input(f"What is the {i}{suffix} data? "))
+
+    # new data system
+
+    data = []
+    for k in inputs:
+        data.append(input(k+": "))
     name = input("Enter name for image: ")
     pygl.render(x, y,frames,name,data)
 
