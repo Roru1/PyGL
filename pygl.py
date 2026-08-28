@@ -1,6 +1,11 @@
 from functools import cache
 from math import sqrt, floor, ceil
 
+def init(ctx):
+    return
+def shader(uv,ctx):
+    return vec3(128)
+
 class vec2:
     def __init__(self, x, y=None):
         if y is None:
@@ -99,11 +104,16 @@ class Context:
         # so I don't have to change older shaders
         self.textures = self.data
 
+
 class Shaderdata:
-    def __init__(self,shader,description="This shader shows off my awesome shader abilities okay bye",inputs=0):
+    def __init__(self, shader, description="This shader shows off my awesome shader abilities okay bye", inputs=None,init=init):
+        if inputs is None:
+            inputs = ["Texture", "Data 1", "Data 2"]
         self.shader = shader
         self.description = description
         self.inputs = inputs
+        self.init = init
+
 
 
 # Renderer stuff
@@ -202,14 +212,11 @@ def make_afb(width,height,frames):
         image = file.read()
     with open("temp.tab", "rb") as file:
         audio = file.read()
-        if audio == b"":
-            with open("wiiumiimaker.tab", "rb") as music:
-                audio = music.read()
     return x+y+frames+image+audio
 
 
 # Main render function
-def render(x=255, y=255,frames=1,name="output",data=[]):
+def render(x=255, y=255,frames=1,name="output",data=[],shader=shader,init=init):
     total = x * y
     with open("temp.tfb", "wb") as file:
         file.write(b"")
@@ -220,6 +227,7 @@ def render(x=255, y=255,frames=1,name="output",data=[]):
     for t in range(frames):
         count = 0
         ctx = Context(t, x, y, data)
+        init(ctx)
         for i in range(0, y):
             for j in range(0, x):
                 count += 1
@@ -258,8 +266,9 @@ def invBilinear(p, a, b, c, d):
 
     if abs(k2) < 0.001:
         denom = e.x*k1 - g.x*k0
-        if abs(denom) < 0.000001:
+        if abs(denom) < 0.000001 or abs(k1) < 0.000001:
             return vec2(-1)
+
         return vec2((h.x*k1 + f.x*k0)/denom, -k0/k1)
 
     w = k1*k1 - 4*k0*k2
@@ -320,3 +329,4 @@ def sampleinterpolated(image, x, y,interpolationmode=0, imagetype=0, mode=0, bor
     else:
         print("nothing else buddy")
         return "nothing else"
+

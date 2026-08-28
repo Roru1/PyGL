@@ -1,7 +1,8 @@
 import pygl
+from pygl import init,shader
 import importlib
 import os
-from afbconverter import afbtogif
+from afbconverter import afbtogif, afbtomp4
 from ppmconverter import ppmtopng
 
 print("\033[34;1mSHADER RUNNER\033[0m")
@@ -33,21 +34,22 @@ def main():
             continue
 
         if not isinstance(shader_dict[b[c-1]],pygl.Shaderdata):
-          pygl.shader = shader_dict[b[c-1]]
+          shader = shader_dict[b[c-1]]
 
           break
         else:
           shader_data = shader_dict[b[c-1]]
           print(shader_data.description)
           if input("Do you want this shader?(y/n) ").startswith("y"):
-              pygl.shader = shader_data.shader
+              shader = shader_data.shader
               inputs = shader_data.inputs
+              init = shader_data.init
               break
 
 
     else:
         if hasattr(shader_module, "shader"):
-            pygl.shader = shader_module.shader
+            shader = shader_module.shader
 
         else:
             print("""You must define your shaders in shaderpicker, or name your shader "shader" """)
@@ -82,11 +84,12 @@ def main():
     for k in inputs:
         data.append(input(k+": "))
     name = input("Enter name for image: ")
-    pygl.render(x, y,frames,name,data)
+    pygl.render(x, y,frames,name,data,shader,init)
 
 
     if frames != 1:
         afbtogif(name)
+        afbtomp4(name)
     else:
         ppmtopng(name)
 
