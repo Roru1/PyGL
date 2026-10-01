@@ -300,6 +300,12 @@ def lerp3(color1,color2,t):
     t = vec3(t)
     return color2*t+(color1*(vec3(1)-t))
 
+def gradient(colors,t):
+    tea = (t%(1/(len(colors)-1)))*(len(colors)-1)
+    index = floor(t*(len(colors)-1))
+    print(f"{index}\n\naaa{index}/\n")
+    return lerp3(colors[index],colors[index+1],tea)
+
 def bilin3(color1,color2,color3,color4,ta):
     t = ta.x
     a = ta.y

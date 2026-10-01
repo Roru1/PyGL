@@ -28,6 +28,7 @@ def afbtogif(name):
     frames = []
     for i in range(framesnum):
         frame = Image.frombytes("RGB",(width,height),bytes(bytesarray[i*framelen:(i*framelen)+framelen]))
+
         frames.append(frame)
     if not name.endswith(".gif"):
         name += ".gif"
@@ -99,4 +100,4 @@ def afbtomp4(name):
     subprocess.run(f"ffmpeg -f rawvideo -pixel_format rgb24   -video_size {width}x{height} -framerate 24 -i {name}.tfb  -f u8 -ar 16000 -ac 1 -i {name}.tab -c:v libx264 -pix_fmt yuv420p -c:a aac {name}.mp4", shell = True)
 
 if __name__ == "__main__":
-    mp4toafb("input")
+    mp4toafb("thespoiler")
